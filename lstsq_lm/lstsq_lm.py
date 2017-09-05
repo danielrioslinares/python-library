@@ -3,7 +3,9 @@
 """
 lstsq_lm
 	@version : 0.1.0
-	@author : Daniel Ríos Linares (c) 2016, riv@hotmail.es
+
+	@author : Daniel Ríos Linares (c) 2017, riv@hotmail.es
+
 	@description : A simple program to demonstrate the Levenberg-Marquardt least
 		squares	algorithm for linear and nonlinear fits. The complete program
 		has been obtained from Numerical Recipes in C, and the source code from
@@ -11,6 +13,11 @@ lstsq_lm
 		the most part has been interpretated by me and modified). This package
 		is the standalone version, you can sustitute the inv function (computes
 		the inverse of a matrix) with other different.
+
+	@name : lstsq_lm
+		    |     |
+		    |     Levenberg-Marquardt algorithm
+		    Least squares
 
 	@license : GPL-3.0
 		This program is free software: you can redistribute it and/or modify
@@ -58,8 +65,7 @@ from numpy.linalg import inv
 #
 # 	@author : Daniel Ríos Linares
 #
-#	@version : 0.1.1
-#		*updated from 0.1.0 August 19, 2017 : <method recalc_jac> improved
+#	@version : 0.1.0 August 19, 2017
 #
 # 	@references :
 # 		1) William H. Press, Saul A. TeuKolsky, W.T. Vetterling & B.P. Flannery

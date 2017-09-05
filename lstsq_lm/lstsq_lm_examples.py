@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# You need to have the fitting.py file in the same folder, if not change it!
+# You need to have the lstsq_lm.py file in the same folder, if not change it!
 from lstsq_lm import LeastSquares
 
 # Other stuff
