@@ -7,9 +7,7 @@ intsm_ue
 	@author : Daniel Ríos Linares (c) 2017, riv@hotmail.es
 
 	@description : A simple program to demonstrate the classical Simpson 1D
-	 	integration of a set of data X,Y with a non-uniform mesh (uneven), if
-		you need the even version (faster) check for "int1d_sm_even" in the
-		source.
+	 	integration of a set of data X,Y with a non-uniform mesh (uneven)
 
 	@license : GPL-3.0
 		This program is free software: you can redistribute it and/or modify
