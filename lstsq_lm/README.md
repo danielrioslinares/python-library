@@ -23,7 +23,7 @@ Linear regression 1D:
 
 ![Example001](https://github.com/hasbornasu/pylib/blob/master/lstsq_lm/examples_output/example_001.png)
 
-Nonlinear modelation 1D:
+Nonlinear modelation 1D: 
 
 ![Example002](https://github.com/hasbornasu/pylib/blob/master/lstsq_lm/examples_output/example_002.png)
 
