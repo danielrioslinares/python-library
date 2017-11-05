@@ -4,8 +4,7 @@
 rtf1d_mu
 	@version : 0.1.0
 
-	@author : Daniel Ríos Linares (c) 2017, riv@hotmail.es
-
+	@author : Daniel Ríos Linares (c) 2017, hasbornasu@gmail.com
 	@description : A program able to solve an equation f(x) = 0, you can use
 	classic methods	like bisection, secant or regula-falsi, and others like Van
 	Wijngaarden-Dekker-Brent.
