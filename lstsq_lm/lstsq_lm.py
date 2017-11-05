@@ -4,7 +4,7 @@
 lstsq_lm
 	@version : 0.1.0
 
-	@author : Daniel Ríos Linares (c) 2017, riv@hotmail.es
+	@author : Daniel Ríos Linares (c) 2017, hasbornasu@gmail.com
 
 	@description : A simple program to demonstrate the Levenberg-Marquardt least
 		squares	algorithm for linear and nonlinear fits. The complete program
@@ -15,8 +15,8 @@ lstsq_lm
 		the inverse of a matrix) with other different.
 
 	@name : lstsq_lm
-		    |     |
-		    |     Levenberg-Marquardt algorithm
+		    | |
+		    | Levenberg-Marquardt algorithm
 		    Least squares
 
 	@license : GPL-3.0
