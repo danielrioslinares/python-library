@@ -4,7 +4,7 @@
 intsm_ue
 	@version : 0.1.0
 
-	@author : Daniel Ríos Linares (c) 2017, riv@hotmail.es
+	@author : Daniel Ríos Linares (c) 2017, hasbornasu@gmail.com
 
 	@description : A simple program to demonstrate the classical Simpson 1D
 	 	integration of a set of data X,Y with a non-uniform mesh (uneven)
