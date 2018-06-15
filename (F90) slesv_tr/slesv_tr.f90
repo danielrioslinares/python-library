@@ -1,7 +1,7 @@
 
 
 
-! <subroutine sle_tr(<array 1-by-N> Aupp, <array 1-by-N> Adia, <array 1-by-N> Alow, <array 1-by-N> B, <integer> N, <array 1-by-N> X)>
+! <subroutine slesv_tr(<array 1-by-N> Aupp, <array 1-by-N> Adia, <array 1-by-N> Alow, <array 1-by-N> B, <integer> N, <array 1-by-N> X)>
 ! 	@argument <array 1-by-N> Aupp : upper diagonal vector
 ! 	@argument <array 1-by-N> Adia : main diagonal vector
 ! 	@argument <array 1-by-N> Alow : lower diagonal vector
@@ -40,7 +40,7 @@
 ! 	@references :
 !		@TODO XXX
 !
-subroutine sle_tr(Aupp, Adia, Alow, B, N, X)
+subroutine slesv_tr(Aupp, Adia, Alow, B, N, X)
 
 	implicit none
 
@@ -81,4 +81,4 @@ subroutine sle_tr(Aupp, Adia, Alow, B, N, X)
 		X(i) = P(i) * X(i+1) + Q(i)
 	end do
 
-end subroutine sle_tr
+end subroutine slesv_tr
