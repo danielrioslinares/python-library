@@ -35,95 +35,126 @@ subroutine inpsp_cs(new_X, X, Y, M_i, M_f, N, L, new_Y, A, M)
 	integer								:: N,L ! Number of points to interpolate
 
 	! Input variables
-	real								:: M_i,M_f ! Initial and final momentums
+	real*8								:: M_i,M_f ! Initial and final momentums
 
 	! Input arrays
-	real								:: X(0:N-1),Y(0:N-1),new_X(0:L-1)
+	real*8								:: X(0:N-1),Y(0:N-1),new_X(0:L-1)
 
 	! Pointers and temporal variables
 	integer								:: i,j,k,last_i
-	real								:: H(0:N-1) ! Increment I_j
-	real								:: Aupp(0:N-3),Adia(0:N-3),Alow(0:N-3)
-	real								:: B(0:N-3) ! Momentum calcs
-	real								:: P(0:N-3),Q(0:N-3)
+	real*8								:: H(0:N-1) ! Increment I_j
+	real*8								:: Aupp(0:N-3),Adia(0:N-3),Alow(0:N-3)
+	real*8								:: B(0:N-3) ! Momentum calcs
+	real*8								:: P(0:N-3),Q(0:N-3)
+	real*8								:: dydx
 
 	! Output arrays
-	real, intent(out)					:: new_Y(0:L-1) ! output new sampling
-	real, intent(out)					:: A(-1:N-1,0:3) ! polinomial coefficients
-	real, intent(out)					:: M(0:N-1) ! Momentum vector
+	real*8, intent(out)					:: new_Y(0:L-1) ! output new sampling
+	real*8, intent(out)					:: A(-1:N-1,0:3) ! polinomial coefficients
+	real*8, intent(out)					:: M(0:N-1) ! Momentum vector
 
 	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-	! H(0) will never be used
-	H(0) = 0
+	if (N == 1) then
 
-	! Fill the increment vector H(j) for intervals I_j[{x_j,x_{j+1}}_{j=0}^N]
-	do j=0,N-2
+		do i=-1,N-1
 
-		H(j+1) = X(j+1) - X(j)
+			A(i,0) = Y(0)
+			A(i,1) = 0
+			A(i,2) = 0
+			A(i,3) = 0
+			M(i) = 0
 
-	end do
+		end do
 
-	!! Solve tridiagonal system of linear equations for momentums
+	else if (N == 2) then
 
-	! Fill main diagonal with 2s
-	do i=0,N-3
+		dydx = (Y(N-1) - Y(0)) / (X(N-1) - X(0))
 
-		Adia(i) = 2
+		do i=-1,N-1
 
-	end do
+			A(i,0) = Y(0)
+			A(i,1) = dydx
+			A(i,2) = 0
+			A(i,3) = 0
+			M(i) = 0
 
-	! Fill lower diagonal with H(i) division and with Alow(0) = 0
-	Alow(0) = 0
+		end do
 
-	do i=1,N-3
+	else
 
-		Alow(i) = H(i+1) / (H(i+1) + H(i+2))
+		! H(0) will never be used
+		H(0) = 0
 
-	end do
+		! Fill the increment vector H(j) for intervals I_j[{x_j,x_{j+1}}_{j=0}^N]
+		do j=0,N-2
 
-	! Fill upper diagonal with H(i) division and with Aupp(N-3) = 0
-	Aupp(N-3) = 0
+			H(j+1) = X(j+1) - X(j)
 
-	do i=0,N-4
+		end do
 
-		Aupp(i) = H(i+2) / (H(i+1) + H(i+2))
+		!! Solve tridiagonal system of linear equations for momentums
 
-	end do
+		! Fill main diagonal with 2s
+		do i=0,N-3
 
-	! Fill the non-homogeneous vector b
-	do i=0,N-3
+			Adia(i) = 2
 
-		B(i) = 6 / (H(i+1) + H(i+2)) * ( (Y(i+2) - Y(i+1)) / H(i+2) &
-			- (Y(i+1) - Y(i)) / H(i+1) )
+		end do
 
-	end do
+		! Fill lower diagonal with H(i) division and with Alow(0) = 0
+		Alow(0) = 0
 
-	! Add the limits
-	M(0) = M_i
-	call slesv_tr(Aupp, Adia, Alow, B, N-2, M(1:N-2))
-	M(N-1) = M_f
+		do i=1,N-3
 
-	! Fill the coefficients of the cubic polynomial
-	do j=0,N-2
+			Alow(i) = H(i+1) / (H(i+1) + H(i+2))
 
-		A(j,3) = 1 / (6 * H(j+1)) * (M(j+1) - M(j))
-		A(j,2) = (X(j+1) * M(j) - X(j) * M(j+1)) / (2 * H(j+1))
-		A(j,1) = X(j)**2 / (2 * H(j+1)) * M(j+1) + (Y(j+1) - Y(j)) / H(j+1) &
-			- H(j+1) / 6 * (M(j+1) - M(j)) - X(j+1)**2 / (2 * H(j+1)) * M(j)
-		A(j,0) = (X(j+1)**3 * M(j) - X(j)**3 * M(j+1)) / (6 * H(j+1)) + Y(j) - H(j+1)**2 / 6 * M(j) &
-			- ((Y(j+1) - Y(j)) / H(j+1) - H(j+1) / 6 * (M(j+1) - M(j))) * X(j)
+		end do
 
-	end do
+		! Fill upper diagonal with H(i) division and with Aupp(N-3) = 0
+		Aupp(N-3) = 0
 
-	A(-1,3) = 0
-	A(-1,2) = 0
-	A(-1,1) = 3 * A(0,3) * X(0)**2 + 2 * A(0,2) * X(0) + A(0,1)
-	A(-1,0) = Y(0) - A(-1,1) * X(0)
-	A(N-1,3) = 0
-	A(N-1,2) = 0
-	A(N-1,1) = 3 * A(N-2,3) * X(N-1)**2 + 2 * A(N-2,2) * X(N-1) + A(N-2,1)
-	A(N-1,0) = Y(N-1) - A(N-1,1) * X(N-1)
+		do i=0,N-4
+
+			Aupp(i) = H(i+2) / (H(i+1) + H(i+2))
+
+		end do
+
+		! Fill the non-homogeneous vector b
+		do i=0,N-3
+
+			B(i) = 6 / (H(i+1) + H(i+2)) * ( (Y(i+2) - Y(i+1)) / H(i+2) &
+				- (Y(i+1) - Y(i)) / H(i+1) )
+
+		end do
+
+		! Add the limits
+		M(0) = M_i
+		call slesv_tr(Aupp, Adia, Alow, B, N-2, M(1:N-2))
+		M(N-1) = M_f
+
+		! Fill the coefficients of the cubic polynomial
+		do j=0,N-2
+
+			A(j,3) = 1 / (6 * H(j+1)) * (M(j+1) - M(j))
+			A(j,2) = (X(j+1) * M(j) - X(j) * M(j+1)) / (2 * H(j+1))
+			A(j,1) = X(j)**2 / (2 * H(j+1)) * M(j+1) + (Y(j+1) - Y(j)) / H(j+1) &
+				- H(j+1) / 6 * (M(j+1) - M(j)) - X(j+1)**2 / (2 * H(j+1)) * M(j)
+			A(j,0) = (X(j+1)**3 * M(j) - X(j)**3 * M(j+1)) / (6 * H(j+1)) + Y(j) - H(j+1)**2 / 6 * M(j) &
+				- ((Y(j+1) - Y(j)) / H(j+1) - H(j+1) / 6 * (M(j+1) - M(j))) * X(j)
+
+		end do
+
+		A(-1,3) = 0
+		A(-1,2) = 0
+		A(-1,1) = 3 * A(0,3) * X(0)**2 + 2 * A(0,2) * X(0) + A(0,1)
+		A(-1,0) = Y(0) - A(-1,1) * X(0)
+		A(N-1,3) = 0
+		A(N-1,2) = 0
+		A(N-1,1) = 3 * A(N-2,3) * X(N-1)**2 + 2 * A(N-2,2) * X(N-1) + A(N-2,1)
+		A(N-1,0) = Y(N-1) - A(N-1,1) * X(N-1)
+
+	end if
 
 	! Evaluate the new mesh new_X (last_i speeds up the loop for sorted new_X)
 	last_i = 0
