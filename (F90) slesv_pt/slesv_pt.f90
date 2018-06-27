@@ -10,7 +10,7 @@
 ! 	@argument <array 1-by-N> Alow : lower diagonal vector
 ! 	@argument <array 1-by-N> Alow2 : lower lower diagonal vector
 ! 	@argument <array 1-by-N> B : B vector
-! 	@argument <array 1-by-N> N : number of unknowns (lenght of Aupp, Adia...)
+! 	@argument <array 1-by-N> N : number of unknowns (length of Aupp, Adia...)
 !
 !	@returns <array 1-by-N> X : exact solution
 !
